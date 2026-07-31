@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Business Center</title>
+  <style>
+    /* Global Resets & Dark Theme */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #12161f;
+      color: #ffffff;
+      padding: 16px;
+      padding-bottom: 90px; /* Space for sticky bottom bar */
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* Header Section */
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .main-title {
+      color: #d4af37;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .banner-table {
+      background-color: #1a202c;
+      border: 1px solid #2d3748;
+      margin: 15px auto;
+      border-collapse: collapse;
+      text-align: center;
+      color: #e2e8f0;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .banner-table td {
+      padding: 10px 16px;
+      border: 1px solid #2d3748;
+    }
+
+    .site-link {
+      color: #d4af37;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .site-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Category Title */
+    .category-section {
+      margin-bottom: 35px;
+    }
+
+    .category-title {
+      color: #d4af37;
+      font-size: 1.4rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid #2d3748;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+
+    /* Grid Layout for Cards */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      list-style: none;
+      padding: 0;
+    }
+
+    @media (min-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+    }
+
+    /* Product Card Styling */
+    .product-card {
+      background-color: #1a202c;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .product-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+      color: #ffffff;
+      height: 2.6em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.3;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background-color: #2d3748;
+    }
+
+    /* Dark Gold Outline Button */
+    .basket-btn {
+      background-color: transparent;
+      color: #d4af37;
+      border: 1px solid #d4af37;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 130px;
+      transition: all 0.2s ease;
+    }
+
+    .basket-btn:hover {
+      background-color: #d4af37;
+      color: #12161f;
+    }
+
+    .basket-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* Full-width container for 50 sub-items grid */
+    .recommendations-wrapper {
+      grid-column: 1 / -1;
+      background-color: #161b26;
+      border: 1px solid #d4af37;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 10px 0 20px 0;
+      display: none;
+    }
+
+    .recommendations-wrapper.active {
+      display: block;
+    }
+
+    .rec-header {
+      color: #d4af37;
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close-rec-btn {
+      background: none;
+      border: none;
+      color: #a0aec0;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .close-rec-btn:hover {
+      color: #ffffff;
+    }
+
+    .recommendations-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      list-style: none;
+      padding: 0;
+    }
+
+    @media (min-width: 768px) {
+      .recommendations-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    /* Sticky Bottom Basket Bar */
+    .bottom-basket-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #1a202c;
+      border-top: 2px solid #d4af37;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+    }
+
+    .basket-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .basket-count {
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: #ffffff;
+    }
+
+    .basket-total {
+      font-size: 0.8rem;
+      color: #a0aec0;
+    }
+
+    .checkout-btn {
+      background-color: #d4af37;
+      color: #12161f;
+      border: none;
+      padding: 10px 18px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .checkout-btn:hover {
+      background-color: #b8952b;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <header>
+      <h1 class="main-title">Online Business Centre</h1>
+
+    🛍️ 
+
+      <br/>
+      <p><strong>This is my <u>first website</u></strong>.</p>
+      <br/>
+      <a href="page2.html" class="site-link">Visit my site</a>
+
+      <hr style="border-color: #2d3748; margin: 20px 0;"/>
+
+      <p><em>It's going to be about selling shoes, clothes, glasses, and smart watches.</em></p>
+    </header>
+
+    <!-- ================= SHOES CATEGORY ================= -->
+    <div class="category-section">
+      <h2 class="category-title">Footwear Collection</h2>
+      <ol class="product-grid" id="footwear-grid" start="1"></ol>
+    </div>
+
+    <!-- ================= CLOTHES CATEGORY ================= -->
+    <div class="category-section">
+      <h2 class="category-title">Apparel & Garments</h2>
+      <ol class="product-grid" id="apparel-grid" start="51"></ol>
+    </div>
+
+    <!-- ================= GLASSES CATEGORY ================= -->
+    <div class="category-section">
+      <h2 class="category-title">Eyewear & Optics</h2>
+      <ol class="product-grid" id="eyewear-grid" start="101"></ol>
+    </div>
+
+    <!-- ================= SMARTWATCHES CATEGORY ================= -->
+    <div class="category-section">
+      <h2 class="category-title">Timepieces & Smartwatches</h2>
+      <ol class="product-grid" id="watches-grid" start="151"></ol>
+    </div>
+
+  </div>
+
+  <!-- Sticky Bottom Basket Order Section -->
+  <div class="bottom-basket-bar">
+    <div class="basket-info">
+      <span class="basket-count" id="basket-count-text">Basket: 0 Items</span>
+      <span class="basket-total" id="basket-total-text">Total: $0.00</span>
+    </div>
+    <button class="checkout-btn">Checkout →</button>
+  </div>
+
+  <!-- Dynamic Script for 200 Products & 50 Related Item Generator -->
+  <script>
+    const categories = [
+      {
+        containerId: "footwear-grid",
+        prefix: "Footwear Item",
+        images: [
+          "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",
+          "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400",
+          "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=400",
+          "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=400"
+        ]
+      },
+      {
+        containerId: "apparel-grid",
+        prefix: "Apparel Item",
+        images: [
+          "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400",
+          "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=400",
+          "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=400",
+          "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400"
+        ]
+      },
+      {
+        containerId: "eyewear-grid",
+        prefix: "Eyewear Item",
+        images: [
+          "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400",
+          "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400"
+        ]
+      },
+      {
+        containerId: "watches-grid",
+        prefix: "Smartwatch Item",
+        images: [
+          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
+          "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400",
+          "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=400",
+          "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400"
+        ]
+      }
+    ];
+
+    const allImages = categories.flatMap(c => c.images);
+    const cartSvg = `<svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>`;
+
+    let totalItemsInCart = 0;
+
+    // Build the 200 items
+    categories.forEach(cat => {
+      const container = document.getElementById(cat.containerId);
+      for (let i = 1; i <= 50; i++) {
+        const imgUrl = cat.images[(i - 1) % cat.images.length];
+        const li = document.createElement('li');
+        li.className = 'product-card';
+        const itemTitle = `${cat.prefix} #${i}`;
+        
+        li.innerHTML = `
+          <span class="product-title">${itemTitle}</span>
+          <img src="${imgUrl}" alt="${itemTitle}">
+          <button class="basket-btn" onclick="toggleRecommendations(this, '${itemTitle}')">
+            ${cartSvg}
+            Order
+          </button>
+        `;
+        container.appendChild(li);
+      }
+    });
+
+    // Expand/Collapse 50 Random Related Items under clicked card
+    function toggleRecommendations(btn, title) {
+      // Increment basket count
+      totalItemsInCart++;
+      document.getElementById('basket-count-text').innerText = `Basket: ${totalItemsInCart} Items`;
+      document.getElementById('basket-total-text').innerText = `Total: $${(totalItemsInCart * 29.99).toFixed(2)}`;
+
+      const parentCard = btn.closest('.product-card');
+      const parentGrid = parentCard.parentElement;
+
+      // Check if an existing panel is open directly after this card
+      const nextElem = parentCard.nextElementSibling;
+      if (nextElem && nextElem.classList.contains('recommendations-wrapper')) {
+        nextElem.remove();
+        return;
+      }
+
+      // Remove any previously open panels
+      document.querySelectorAll('.recommendations-wrapper').forEach(el => el.remove());
+
+      // Create new panel
+      const recWrapper = document.createElement('div');
+      recWrapper.className = 'recommendations-wrapper active';
+
+      let recItemsHTML = '';
+      for (let j = 1; j <= 50; j++) {
+        const randomImg = allImages[Math.floor(Math.random() * allImages.length)];
+        const randomPrice = (Math.floor(Math.random() * 80) + 15).toFixed(2);
+        recItemsHTML += `
+          <li class="product-card" style="padding: 8px;">
+            <span class="product-title" style="font-size: 0.8rem; height: 2.2em;">Related #${j}</span>
+            <img src="${randomImg}" alt="Related Item" style="height: 90px; margin-bottom: 6px;">
+            <span style="color: #d4af37; font-weight: bold; font-size: 0.8rem; margin-bottom: 6px;">$${randomPrice}</span>
+            <button class="basket-btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick="addCartOnly(this)">
+              ${cartSvg} Add
+            </button>
+          </li>
+        `;
+      }
+
+      recWrapper.innerHTML = `
+        <div class="rec-header">
+          <span>🔍 50 Related Suggestions for <strong>${title}</strong></span>
+          <button class="close-rec-btn" onclick="this.closest('.recommendations-wrapper').remove()">✕</button>
+        </div>
+        <ul class="recommendations-grid">
+          ${recItemsHTML}
+        </ul>
+      `;
+
+      // Insert directly after clicked product card
+      parentCard.after(recWrapper);
+      recWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function addCartOnly(btn) {
+      totalItemsInCart++;
+      document.getElementById('basket-count-text').innerText = `Basket: ${totalItemsInCart} Items`;
+      document.getElementById('basket-total-text').innerText = `Total: $${(totalItemsInCart * 29.99).toFixed(2)}`;
+      btn.innerText = "✓ Added";
+      btn.style.borderColor = "#48bb78";
+      btn.style.color = "#48bb78";
+    }
+  </script>
+
+</body>
+</html>
