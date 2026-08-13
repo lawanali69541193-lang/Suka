@@ -1,1 +1,170 @@
-# Suka
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Percentage & Fingerprint Match</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #ffffff;
+            charset: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: #161b22;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            width: 350px;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            color: #ff4757;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            background: #0d1117;
+            color: #fff;
+            text-align: center;
+        }
+
+        .scanner-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .scanner-box {
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .fingerprint {
+            width: 60px;
+            height: 70px;
+            border: 2px dashed #ff4757;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: 0.3s;
+            background: #0d1117;
+        }
+
+        .scanner-box.active .fingerprint {
+            background: #ff4757;
+            color: #fff;
+            box-shadow: 0 0 15px #ff4757;
+        }
+
+        button {
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 90%;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background-color: #ff6b81;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Love & Fingerprint Match</h2>
+        <p style="font-size: 12px; color: #8b949e;">Enter names and touch fingerprints</p>
+        
+        <input type="text" id="maleName" placeholder="Male's Name">
+        <input type="text" id="femaleName" placeholder="Woman's Name">
+
+        <div class="scanner-container">
+            <div class="scanner-box" id="maleScanner" onclick="toggleScan('male')">
+                <div class="fingerprint">♂</div>
+                <small>His Print</small>
+            </div>
+            <div class="scanner-box" id="femaleScanner" onclick="toggleScan('female')">
+                <div class="fingerprint">♀</div>
+                <small>Her Print</small>
+            </div>
+        </div>
+
+        <button onclick="calculateLove()">Calculate Match</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let maleScanned = false;
+        let femaleScanned = false;
+
+        function toggleScan(gender) {
+            if (gender === 'male') {
+                maleScanned = true;
+                document.getElementById('maleScanner').classList.add('active');
+            } else {
+                femaleScanned = true;
+                document.getElementById('femaleScanner').classList.add('active');
+            }
+        }
+
+        function calculateLove() {
+            const male = document.getElementById('maleName').value.trim();
+            const female = document.getElementById('femaleName').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            if (!male || !female) {
+                resultDiv.style.color = '#ff4757';
+                resultDiv.innerHTML = "Please enter both names!";
+                return;
+            }
+
+            if (!maleScanned || !femaleScanned) {
+                resultDiv.style.color = '#ff4757';
+                resultDiv.innerHTML = "Both fingerprints must be scanned!";
+                return;
+            }
+
+            // Generate a consistent pseudo-random love percentage based on names
+            let combined = (male + female).toLowerCase();
+            let hash = 0;
+            for (let i = 0; i < combined.length; i++) {
+                hash = combined.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            let percentage = Math.abs(hash % 41) + 60; // Generates a score between 60% and 100%
+
+            resultDiv.style.color = '#2ed573';
+            resultDiv.innerHTML = `❤️ ${male} & ${female} ❤️<br>Match Score: ${percentage}% Compatibility!`;
+        }
+    </script>
+
+</body>
+</html>
